@@ -5,10 +5,17 @@ also powers DJFX Looper and QuotaFX. This source edition adds an original native
 MPC skin with three Q-Link knobs and an on-device quick guide. It does not include the shared
 proprietary QuotaFX/DJFX desktop or iOS interface or QuotaScope library.
 
-**Development status:** offline core and package checks pass. Force hardware
-acceptance is still required before a downloadable catalog release.
-There is no current OpenMPC catalog listing or hardware-verified binary release
-from this repository. Do not confuse host tests with an MPC listening test.
+**Release 1.1.3:** the scope-free Native package passed sound, three-knob control,
+steady-display, Help and test-copy save/reload checks on Akai Force 3.10.0.49.
+Its own package uninstaller and installer were checked on that device; the
+same accepted binary remains installed. Audio CPU: 1.2% p99 / 1.5% maximum of
+a 128-frame block at 44.1 kHz. See `docs/hardware-1.1.3.json` for exact hashes.
+Other MPC models/firmware and Gen2 are not verified. No firmware, network or
+startup changes are included. The OpenMPC catalog submission is separate from
+this public GitHub download.
+
+[Download Native 1.1.3](https://github.com/macdigi/djfx-looper/releases/tag/v1.1.3).
+The free enhanced-scope edition is available through [Rare Data HQ](https://getquota.app/djfx-looper).
 
 ## Audio and controls
 
@@ -73,8 +80,8 @@ Builds do not connect to or install anything on a device.
 
 The compiler targets ARM32 hard-float with glibc 2.31. That is a build target,
 not a claim of support for every MPC model or firmware. Gen2/AArch64 is not
-included. The actual release ZIP must still pass the catalog's
-hardware and CPU workflow before a stable release is published.
+included. The 1.1.3 release ZIP passed the catalog checks and the Force workflow described
+above. A build target does not establish other-device hardware acceptance.
 
 ## Licensing and provenance
 
