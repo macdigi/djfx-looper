@@ -1,0 +1,155 @@
+{
+  "sourceCommit": "883d73f2f210ac016bde083f458094b89b09cf9c",
+  "workingTreeDirty": false,
+  "files": [
+    {
+      "path": ".github/workflows/test.yml",
+      "sha256": "09f0eb25d96866a69497e2c1e6dffb4845d58a843cc4673a2752d4de26479218"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "6b8cbf2363e3526a56f11d80d567508525b85f714672aae2838496a301845d0b"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "a1dec60f0fcb7432141a7bd0f65c2a8d6fc9f2a4670b39333878568afdcc1b12"
+    },
+    {
+      "path": "DEPENDENCIES.json",
+      "sha256": "243958470b5b45fe231ab5d8feb5682e4cf97e9c610e4bb1a62e90441dcf1ab8"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "NOTICE",
+      "sha256": "4d3ef13ca0b519b8cf250ef66a3369d552e966a51ee80311d515ff2a04839cd2"
+    },
+    {
+      "path": "README.md",
+      "sha256": "c83795207678da545ac5312016b60f791b25c94f11d3e83e8634e98c92d67eb2"
+    },
+    {
+      "path": "catalog/djfx-looper.json",
+      "sha256": "37417061322d9cd6c2f3219517f8bacbd623517bea8869434711aefae0d0dc7a"
+    },
+    {
+      "path": "core/DJFXKernel.h",
+      "sha256": "2387bbb3e210263a909bb270e7f3bd866aa61219af47cee1f558d2121b967d5f"
+    },
+    {
+      "path": "core/DJFXLooperC.cpp",
+      "sha256": "7c26ad770c7385cc9c033c5e4d0b7a4d6b6e1518c0d4eaf95b9bf080e8ae4f27"
+    },
+    {
+      "path": "core/DJFXLooperC.h",
+      "sha256": "4997d2eed5c75bc8ff7d37c0dabed419e25c8002e788caaad8d8d8e193f7a622"
+    },
+    {
+      "path": "core/DJFXLooperCore.h",
+      "sha256": "f9162e5e84b2d2af1c28eaf6427c8b644441ef50717a21525298fa5e44e4d464"
+    },
+    {
+      "path": "core/ORIGIN.sha256",
+      "sha256": "4b6e051d3d9216f96a92c031accecd9643c8d4be52361f005ab68aca6890d45c"
+    },
+    {
+      "path": "ports/mpc/CMakeLists.txt",
+      "sha256": "687621ffb44c945e28425e77ef46322331945420b167e408f194718679c4cd4e"
+    },
+    {
+      "path": "ports/mpc/ContractTests.cpp",
+      "sha256": "9d630fa6fd3814e2917d52034b0dc4930e82af91de573bb8a11b485a89b36235"
+    },
+    {
+      "path": "ports/mpc/NativeScope.h",
+      "sha256": "b0a7c52fccfab2c86490517216bd264047505bbc1f57ef3874f42deedfda0cd5"
+    },
+    {
+      "path": "ports/mpc/NativeScopeSnapshot.cpp",
+      "sha256": "52fa74124a3172330d3cf085b2497b9b4e479c021f1c203c4e3adb1a8b790221"
+    },
+    {
+      "path": "ports/mpc/NativeScopeTests.cpp",
+      "sha256": "d34cafa2286a87fd0f7718d0544a054349e968539f0c0493ba12e97a217d12c1"
+    },
+    {
+      "path": "ports/mpc/Plugin.cpp",
+      "sha256": "dff31a9d16560b70704e98bdc11cb0ad40d456919709f5ea1be8c314491454f5"
+    },
+    {
+      "path": "ports/mpc/ScopeBridge.h",
+      "sha256": "9fe947a5ed31917ae9f83991c8f6a5796db6391b324aaa9fe680212277f8af8b"
+    },
+    {
+      "path": "ports/mpc/Vst2Abi.h",
+      "sha256": "5cdb00e1053f97cf8d8bf8d059e4b78a7eb114063b7fbfc75e36bc78101e0c24"
+    },
+    {
+      "path": "ports/mpc/exports.map",
+      "sha256": "3e948c388523a918aa6a883b3ceff2be1a92884d0e277f25186c9399c1193c66"
+    },
+    {
+      "path": "ports/mpc/toolchain.cmake",
+      "sha256": "2e09326dd89fcf5af56386a00ceaf36a870e80ff7444f2e079f001d1cbff7673"
+    },
+    {
+      "path": "ports/mpc/zig-ar",
+      "sha256": "8d9a92610ac547533bcce655621c435015305c043e273ea6a038ce999177935c"
+    },
+    {
+      "path": "ports/mpc/zig-cxx",
+      "sha256": "a12bfc5d506b03486904c694dbb3af1836ec8259e752d9c5623d87236cb7c718"
+    },
+    {
+      "path": "ports/mpc/zig-ranlib",
+      "sha256": "95c43e760f162d2d675fdd57c0fa272635fca4dfaed4638416013a75725083fe"
+    },
+    {
+      "path": "ports/openmpc/assets/ArchivoBlack-OFL.txt",
+      "sha256": "4cafdbbd100af37a23805af09b7068e4daafb4516dc3d6d52436f4a9d7b4c0d3"
+    },
+    {
+      "path": "ports/openmpc/assets/ArchivoBlack.ttf",
+      "sha256": "dd9a89a019b4849f66ab75455fe7bdf931311042cbb0f0f97acc061539703180"
+    },
+    {
+      "path": "ports/openmpc/assets/OpenMPC-MIT.txt",
+      "sha256": "ce8ee66cb52d9d54312bc5d0c3c041ce3bc8eec9f482370b80ccb29b5a9ea66e"
+    },
+    {
+      "path": "ports/openmpc/build_skin.py",
+      "sha256": "73b007ef6ea1fd876c979f367990cb9fe456271e3d786b0da846ff8d2d25b9b4"
+    },
+    {
+      "path": "ports/openmpc/html_art_native.py",
+      "sha256": "01c76652ec5d07a6fed30873a1689bd3a428b58959f0e040baf8883d3360d7a0"
+    },
+    {
+      "path": "ports/openmpc/review_skin.py",
+      "sha256": "ee434db27ba445e8f2c88a509d204a5b52875c108fb3f9629ed8d0b1a56497bf"
+    },
+    {
+      "path": "ports/openmpc/test_package.py",
+      "sha256": "e35d05bb46e6c83c22c0215d0309d4847c541cea480da5e754a6a57370f1e0c1"
+    },
+    {
+      "path": "tested.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "tests/CBridgeCheck.cpp",
+      "sha256": "20fbf0a42276ab62bfa46c881e0e6fd48d4bad9e954363814e5137a7909733c5"
+    },
+    {
+      "path": "tools/build_openmpc.py",
+      "sha256": "07169beb43a63e7a6c91a6e3ef38ab6f6941256fd3e5ad7ff99a352af94a0d36"
+    }
+  ],
+  "nativeEdition": true,
+  "license": "Apache-2.0",
+  "privateScopesIncluded": false,
+  "nativeScopeIncluded": true,
+  "distributionStatus": "Source edition; hardware acceptance pending"
+}

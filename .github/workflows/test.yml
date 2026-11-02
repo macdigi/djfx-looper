@@ -1,0 +1,12 @@
+name: Source contracts
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: cmake -S . -B build/native -DCMAKE_BUILD_TYPE=Release
+      - run: cmake --build build/native --parallel 3
+      - run: ctest --test-dir build/native --output-on-failure

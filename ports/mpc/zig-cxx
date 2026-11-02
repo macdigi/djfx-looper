@@ -1,0 +1,2 @@
+#!/bin/sh
+exec zig c++ -g0 -target arm-linux-gnueabihf.2.31 -mcpu=cortex_a17 "$@"

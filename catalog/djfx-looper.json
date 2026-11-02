@@ -1,0 +1,16 @@
+{
+  "id": "djfx-looper",
+  "name": "DJFX Looper",
+  "author": "Rare Data",
+  "repo": "macdigi/djfx-looper",
+  "kind": "effect",
+  "license": "Apache-2.0",
+  "summary": "Three Q-Link knobs for short loops, speed bends and reverse playback, with native scopes.",
+  "style": "glitch",
+  "tags": [
+    "looper",
+    "reverse",
+    "performance"
+  ],
+  "homepage": "https://getquota.app/djfx-looper"
+}

@@ -1,0 +1,13 @@
+{
+  "toolsRevision": "9eca291f7f741ae15efbdc670ca2aba69759879a",
+  "toolsArchive": "https://codeload.github.com/sd88me/mpc-vst-plugins/tar.gz/9eca291f7f741ae15efbdc670ca2aba69759879a",
+  "toolsArchiveSha256": "4bcf0dda0fa64c1618974aba8f2d2a557e49f2b98bd673286975ab26290eb6c7",
+  "zigVersion": "0.16.0",
+  "toolsFiles": {
+    "shadow_skin.py": "5293336ca0022901d3c21b9369d6426cad3d6e03e38bbc3c38a0fd4b5d53c155",
+    "skin_assets.py": "6d958b105e27d266e89783e3494555506499ae030e3d8b33909354520f597157",
+    "html_art.py": "5e5f906d54811693701c6192b8eec103a07a6b3e9bdd6cf5a032567cc8135b1b",
+    "release.py": "803b7e65574d82928839245c9de7a9686116285bf298047132d4897c39c5730d",
+    "catalog_check.py": "27850d164082b81720d73a4f7be1c647934a506e39c562261044084f4b09b38f"
+  }
+}
