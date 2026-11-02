@@ -12,6 +12,12 @@
 // private QuotaScope protocol, helper process, file or audio callback allocation.
 class DJFXNativeScope {
 public:
+    static constexpr int frameSamples = 2048;
+    struct Frame {
+        std::array<float, frameSamples> left{}, right{};
+        unsigned sequence = 0;
+        float sampleRate = 44100;
+    };
     static_assert(std::atomic<float>::is_always_lock_free, "Display publication must be lock-free");
     static constexpr int columns = 64;
     static constexpr int fftSize = 512;
@@ -29,6 +35,7 @@ public:
     }
     void clear() noexcept {
         left.fill(0); right.fill(0); waterfall.fill(0); write = elapsed = 0;
+        rawLeft.fill(0); rawRight.fill(0); rawWrite=0;
         for (auto& value : display) value.store(0, std::memory_order_relaxed);
         for (auto& value : banks) value.store(0, std::memory_order_relaxed);
     }
@@ -39,6 +46,27 @@ public:
         gain = std::pow(10.f, std::clamp(gainDb, 0, 18) / 20.f);
     }
     int displayIdentity() const noexcept { return 64; } // Retained legacy slot.
+    int modeValue() const noexcept { return mode.load(std::memory_order_relaxed); }
+    int paletteValue() const noexcept { return palette.load(std::memory_order_relaxed); }
+    bool enabledValue() const noexcept { return enabled.load(std::memory_order_relaxed); }
+    void setPalette(int value) noexcept { palette=std::clamp(value,0,2); }
+    // Audio never waits for graphics. Every published sample is atomic; a
+    // bounded sequence check gives readers a coherent frame without a data race.
+    bool readFrame(Frame& result) const noexcept {
+        Frame candidate;
+        for(int attempt=0;attempt<2;++attempt) {
+            const unsigned before=frameSequence.load(std::memory_order_acquire);
+            if(!before||(before&1))continue;
+            for(int i=0;i<frameSamples;++i) {
+                candidate.left[i]=publishedLeft[i].load(std::memory_order_relaxed);
+                candidate.right[i]=publishedRight[i].load(std::memory_order_relaxed);
+            }
+            candidate.sampleRate=publishedRate.load(std::memory_order_relaxed);
+            const unsigned after=frameSequence.load(std::memory_order_acquire);
+            if(before==after){candidate.sequence=after;result=candidate;return true;}
+        }
+        return false;
+    }
     float column(int index) const noexcept {
         return index >= 0 && index < columns ? display[index].load(std::memory_order_relaxed) : 0.f;
     }
@@ -50,6 +78,7 @@ public:
         for (int i = 0; i < frames; ++i) {
             left[write] = finite(audio[0][i]);
             right[write] = finite(audio[1] ? audio[1][i] : audio[0][i]);
+            rawLeft[rawWrite]=left[write];rawRight[rawWrite]=right[write];rawWrite=(rawWrite+1)&(frameSamples-1);
             write = (write + 1) & (fftSize - 1);
             if (++elapsed >= interval) { elapsed = 0; draw(); }
         }
@@ -58,9 +87,13 @@ public:
 private:
     static constexpr double pi = 3.14159265358979323846;
     double rate = 44100;
-    int interval = 1470, elapsed = 0, write = 0, mode = 0, palette = 0;
+    int interval = 1470, elapsed = 0, write = 0;
+    std::atomic<int> mode{0}, palette{0};
     float gain = 2;
-    bool enabled = true;
+    std::atomic<bool> enabled{true};
+    std::array<float, frameSamples> rawLeft{},rawRight{};
+    std::array<std::atomic<float>, frameSamples> publishedLeft{},publishedRight{};
+    std::atomic<unsigned> frameSequence{0};std::atomic<float> publishedRate{44100};int rawWrite=0;
     std::array<float, fftSize> left{}, right{}, window{};
     std::array<std::complex<float>, fftSize> transform{};
     std::array<std::complex<float>, fftSize / 2> twiddle{};
@@ -107,6 +140,9 @@ private:
         return std::clamp((20.f * std::log10(std::max(1.e-6f, amplitude)) + 60.f) / 60.f, 0.f, 1.f);
     }
     void draw() noexcept {
+        frameSequence.fetch_add(1,std::memory_order_acq_rel);
+        for(int i=0;i<frameSamples;++i){publishedLeft[i].store(rawLeft[(rawWrite+i)&(frameSamples-1)],std::memory_order_relaxed);publishedRight[i].store(rawRight[(rawWrite+i)&(frameSamples-1)],std::memory_order_relaxed);}
+        publishedRate.store(float(rate),std::memory_order_relaxed);frameSequence.fetch_add(1,std::memory_order_release);
         if (!enabled) { for (auto& value : display) value.store(0, std::memory_order_relaxed); return; }
         if (mode == 2 || mode == 4) spectrum();
         if (mode == 4) {

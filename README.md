@@ -16,6 +16,14 @@ from this repository. Do not confuse host tests with an MPC listening test.
 
 Offline asset composition only. Live native display responsiveness still needs the Force check.
 
+## Known hardware failure — native display revision in progress
+
+The first native filmstrip scope prototype failed its Force test: the display
+was frozen and visually coarse. Corrective 1.1.1 replaces that path with a
+connected in-process renderer; its live GUI acceptance is still pending. The released branded HQ edition works; use that
+for normal work. No stable binary/catalog release is published here. The code
+and native graphics are being corrected, including the authentic Rare Data logo.
+
 ## Audio and controls
 
 - Length: 230–12 ms, with the accepted reversed logarithmic knob mapping.
@@ -29,22 +37,25 @@ to Rare Data's accepted implementation, not universal bit identity to hardware.
 
 ## The native interface
 
-PLAY has three matching Q-Link knobs and a live display. DISPLAY selects Peaks,
-Wave, Spectrum, Vector, Depth, Trace or Bars, with Scope ON and ink controls.
-These are new native views: 64 display values, quantized filmstrips and a 30 Hz
-analysis update. Vector and Trace use a fixed mint XY point plot; ink choices
-apply to the other views. They are not copies of the private app scope engine.
+PLAY retains three matching native Q-Link knobs. DISPLAY chooses seven original
+scope views, ink and Scope ON. Version 1.1.0's experimental filmstrip meters
+failed the hardware refresh check; they are not used by 1.1.1.
 
-All graphics are drawn by MPC's native skin components. There is no framebuffer
-overlay, external scope worker, filesystem marker, startup hook or helper
-installation. Display publication is lock-free and audio processing allocates
-no memory. The display-only parameters cannot be automated or written by hosts.
+The 1.1.1 candidate draws connected curves in-process from coherent atomic audio
+snapshots. Its renderer verifies four instance-specific panel boundaries before
+writing any pixels, supports rotated/triple-buffered Force framebuffers and
+never draws without its own markers. It starts only inside the Force MPC
+process. It is not an external daemon and installs no startup hook or private
+QuotaScope helper. The shared desktop/iOS scope implementation stays private.
 
-The native edition has a distinct VST identity (`446a4e73`), module
-`DJFXLooperNative.so`, and name **DJFX Looper Native**. It can be tested alongside
-the existing HQ edition without replacing that effect or its saved projects.
-The first fourteen parameter positions and v1 state layout remain readable;
-the 128 appended display/selector parameters are not stored in presets.
+The real Rare Data logo is included under its separate branding permission;
+Apache-2.0 covers the code, not that logo. Forks can build with an unbranded
+skin. Archivo Black retains its SIL OFL terms.
+
+The native identity stays `446a4e73` / `DJFXLooperNative.so`, separate from the
+working HQ edition. The fourteen saved parameters and v1 state layout remain;
+the 128 legacy display/selector parameters remain reserved for compatibility.
+Audio processing allocates no memory and never waits for the display thread.
 
 ## Build and verify
 

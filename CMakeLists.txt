@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(RareDataDJFXCore VERSION 1.1.0 LANGUAGES CXX)
+project(RareDataDJFXCore VERSION 1.1.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 option(DJFX_NATIVE_SCOPE "Build the original native MPC scopes" ON)
 include(CTest)

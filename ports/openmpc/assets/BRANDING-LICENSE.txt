@@ -1,0 +1,10 @@
+Rare Data branding asset permission
+Copyright 2026 Rare Data LLC.
+
+rdlogo.png is excluded from the Apache-2.0 code license. Permission is granted
+to include the unchanged logo in authentic Rare Data DJFX Looper builds and
+their source archives, identifying Rare Data as the origin. No permission is
+granted to use the logo as the branding of a fork, modified product or other
+product, or to imply Rare Data sponsorship or endorsement. Code forks may omit
+or replace the logo; this does not restrict the Apache-2.0 code permissions.
+Rare Data names and marks are reserved.

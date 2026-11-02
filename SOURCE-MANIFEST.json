@@ -1,5 +1,5 @@
 {
-  "sourceCommit": "bd29e6eb0bba05f332a02efe6fedede5f068081e",
+  "sourceCommit": "ccbe75fcbe8f7332491da9161b8a07b16031a5a0",
   "workingTreeDirty": false,
   "files": [
     {
@@ -12,11 +12,11 @@
     },
     {
       "path": "CMakeLists.txt",
-      "sha256": "a1dec60f0fcb7432141a7bd0f65c2a8d6fc9f2a4670b39333878568afdcc1b12"
+      "sha256": "11ed7941b3e532989a0d72e9940c82c10bb017b1672dc4fd9788f5a9115a708e"
     },
     {
       "path": "DEPENDENCIES.json",
-      "sha256": "243958470b5b45fe231ab5d8feb5682e4cf97e9c610e4bb1a62e90441dcf1ab8"
+      "sha256": "a614dc923bf66a788aa5dc480d7d70d5865c886335ca3775004ac6c82e5c5fed"
     },
     {
       "path": "LICENSE",
@@ -24,11 +24,15 @@
     },
     {
       "path": "NOTICE",
-      "sha256": "4d3ef13ca0b519b8cf250ef66a3369d552e966a51ee80311d515ff2a04839cd2"
+      "sha256": "a5cd218e3b2c6007992fe7fb8959c355e7fa3e9b542a1203389f303356f2f1ba"
     },
     {
       "path": "README.md",
-      "sha256": "768623e5e7ea7270a852bf0120a7f8491711ee3f4176ab22e1eb57feae50af20"
+      "sha256": "458c946a2606e145e326d0a5d505594e71e722e4b99446c6ffef3e5ef9a5d05d"
+    },
+    {
+      "path": "benchmarks/force-3.10.0.49-1.1.1.json",
+      "sha256": "49d980a298f8b97f22e31c1f9e43217de3030ffdc91240bf559771aa57148d74"
     },
     {
       "path": "benchmarks/force-3.10.0.49.json",
@@ -64,15 +68,27 @@
     },
     {
       "path": "ports/mpc/CMakeLists.txt",
-      "sha256": "687621ffb44c945e28425e77ef46322331945420b167e408f194718679c4cd4e"
+      "sha256": "313b48e051ee16dd7860f821e6ae58a47bf4a9fc6f00aeebd827890beeb8ba39"
     },
     {
       "path": "ports/mpc/ContractTests.cpp",
-      "sha256": "9d630fa6fd3814e2917d52034b0dc4930e82af91de573bb8a11b485a89b36235"
+      "sha256": "433a0e74bb8e8247e8883aef424d9ef2ddfbfd5478d7eed4c2e8107827adc24d"
+    },
+    {
+      "path": "ports/mpc/FrameDisplay.cpp",
+      "sha256": "373bbb9b5c65ab1c0bd6e5e0cf289ba8705e91d0fd5ab8e9013146d4627bcc39"
+    },
+    {
+      "path": "ports/mpc/FrameDisplay.h",
+      "sha256": "9e7ed30d7f44e2b7b350a407358a6b9d3112aefbe8b221fbeb1d2a9ac01fd104"
+    },
+    {
+      "path": "ports/mpc/FrameGeometry.h",
+      "sha256": "0f6eb855a3f3e84002964e7fb921608819a7c75c28d400f135bf68e5b9d53839"
     },
     {
       "path": "ports/mpc/NativeScope.h",
-      "sha256": "b0a7c52fccfab2c86490517216bd264047505bbc1f57ef3874f42deedfda0cd5"
+      "sha256": "aa513076756be6547b277dc588431abf0429434950f7e202bd1096e0b41d2eb0"
     },
     {
       "path": "ports/mpc/NativeScopeSnapshot.cpp",
@@ -84,11 +100,23 @@
     },
     {
       "path": "ports/mpc/Plugin.cpp",
-      "sha256": "dff31a9d16560b70704e98bdc11cb0ad40d456919709f5ea1be8c314491454f5"
+      "sha256": "4483cd4d3fb595b6c09dd1db6ebff46967b339e7d7795923e67002a1407a2ee8"
     },
     {
       "path": "ports/mpc/ScopeBridge.h",
       "sha256": "9fe947a5ed31917ae9f83991c8f6a5796db6391b324aaa9fe680212277f8af8b"
+    },
+    {
+      "path": "ports/mpc/ScopeCanvas.cpp",
+      "sha256": "165e5fc6131e75c981f7f1162663d4b1f4bad01fb97f43ba54cb7091087a73d9"
+    },
+    {
+      "path": "ports/mpc/ScopeCanvas.h",
+      "sha256": "5d3d9f777ad20abd4ad90ebc8712716697699c85b8887da5b9250391c0295cbd"
+    },
+    {
+      "path": "ports/mpc/ScopeCanvasTests.cpp",
+      "sha256": "6d2e0d146e085c667af0744106d52a7a03112265397f36cafab4b9635e40b1d9"
     },
     {
       "path": "ports/mpc/Vst2Abi.h",
@@ -123,12 +151,20 @@
       "sha256": "dd9a89a019b4849f66ab75455fe7bdf931311042cbb0f0f97acc061539703180"
     },
     {
+      "path": "ports/openmpc/assets/BRANDING-LICENSE.txt",
+      "sha256": "6536afb0bdbbd6821a173a6d0f5496682ca4312826776f90d7f8f6b1e69c2fed"
+    },
+    {
       "path": "ports/openmpc/assets/OpenMPC-MIT.txt",
       "sha256": "ce8ee66cb52d9d54312bc5d0c3c041ce3bc8eec9f482370b80ccb29b5a9ea66e"
     },
     {
+      "path": "ports/openmpc/assets/rdlogo.png",
+      "sha256": "e58c69f78d0b0ec83447c5d00480bc2bf1be0b4f5041b7771b206f218a5c01bf"
+    },
+    {
       "path": "ports/openmpc/build_skin.py",
-      "sha256": "0916cad3e4b5b85d113823161d1ac19f2edd0b5a70d2d9930a8c136f37882629"
+      "sha256": "1052299d3983de4ca032c2b24aeabcdfdcbeb9faf902e14f6decaa7d21ff97ce"
     },
     {
       "path": "ports/openmpc/html_art_native.py",
@@ -140,11 +176,11 @@
     },
     {
       "path": "ports/openmpc/review_skin.py",
-      "sha256": "ee434db27ba445e8f2c88a509d204a5b52875c108fb3f9629ed8d0b1a56497bf"
+      "sha256": "db3e1d084f6505008f06b784d690eb34703c16d8a4e1dbaf3d66cd7274f95205"
     },
     {
       "path": "ports/openmpc/test_package.py",
-      "sha256": "5dfebe99c29c4533e2add705d4141762e85dd892cc7aada5e7a938c20827a752"
+      "sha256": "1c7374242c89452798fb04967e62ae64bc77b64ad897225438420b120a4e07b3"
     },
     {
       "path": "tested.json",
@@ -156,12 +192,12 @@
     },
     {
       "path": "tools/build_openmpc.py",
-      "sha256": "75ca3096a1573be7238d5c11d8d2c01c3bfd717abd0e12e35366c2d602d66a32"
+      "sha256": "745a15196336a42e10af2053e97e505cdee78ab11500bc20e5b9887ab16b466f"
     }
   ],
   "nativeEdition": true,
   "license": "Apache-2.0",
   "privateScopesIncluded": false,
   "nativeScopeIncluded": true,
-  "distributionStatus": "CPU passed on Force 3.10.0.49; display/audio/recall acceptance pending"
+  "distributionStatus": "Corrective 1.1.1 CPU passed; live scope/logo hardware acceptance pending"
 }

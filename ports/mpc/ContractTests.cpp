@@ -29,7 +29,7 @@ if(argc!=2)return 2;auto* library=dlopen(argv[1],RTLD_NOW);if(!library){std::cer
   fx->setParameter(fx,3,0);for(int pass=0;pass<40;++pass)fx->processReplacing(fx,in,out,block);check(std::abs(el.back()-l.back())<1e-7);fx->dispatcher(fx,1,0,0,nullptr,0);
  }
  auto* a=factory(nullptr);auto* b=factory(nullptr);a->setParameter(a,0,.7f);check(std::abs(b->getParameter(b,0))<1e-7);
-#if DJFX_PRIVATE_SCOPE
+#if DJFX_PRIVATE_SCOPE || DJFX_NATIVE_SCOPE
 check(a->getParameter(a,7)!=b->getParameter(b,7));
 #else
 check(a->getParameter(a,7)==1.f&&b->getParameter(b,7)==1.f); // No private display allocation.
@@ -38,7 +38,7 @@ a->dispatcher(a,1,0,0,nullptr,0);b->dispatcher(b,1,0,0,nullptr,0);
 // Physical-Q-Link contract: a continuous Loop knob, with capture strictly
 // above its midpoint. The independent core receives that decision on the very
 // next audio block; there is no worker queue or UI-timer dependency.
-auto* q=factory(nullptr);check(q->uniqueID==(DJFX_NATIVE_SCOPE?0x446a4e73:0x446a4c31)&&q->numParams==(DJFX_NATIVE_SCOPE?142:14)&&q->version==(DJFX_NATIVE_SCOPE?110:101));
+auto* q=factory(nullptr);check(q->uniqueID==(DJFX_NATIVE_SCOPE?0x446a4e73:0x446a4c31)&&q->numParams==(DJFX_NATIVE_SCOPE?142:14)&&q->version==(DJFX_NATIVE_SCOPE?111:101));
 VstParameterProperties props{};check(q->dispatcher(q,56,2,0,&props,0)==1&&props.flags==4);
 #if DJFX_NATIVE_SCOPE
 for(int i=14;i<142;++i){float before=q->getParameter(q,i);q->setParameter(q,i,1);check(q->getParameter(q,i)==before&&q->dispatcher(q,26,i,0,nullptr,0)==0);}

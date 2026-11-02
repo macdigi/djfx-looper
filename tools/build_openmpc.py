@@ -31,7 +31,7 @@ run(['cmake','-S',root,'-B',arm,'-DCMAKE_BUILD_TYPE=Release','-DBUILD_TESTING=OF
 run(['cmake','--build',arm,'--parallel','3'])
 run([sys.executable,root/'ports/openmpc/build_skin.py',out/'skin','--tools',tools])
 skin=out/'skin/Rare Data - VST - DJFX Looper Native';entry=out/'pluginlist-entry.xml'
-entry.write_text('<PLUGIN name="DJFX Looper Native" descriptiveName="DJFX Looper Native" format="VST" category="Fx" manufacturer="Rare Data" version="1.1.0" file="/sdcard/vst/DJFXLooperNative.so" uid="446a4e73" isInstrument="0" fileTime="0" infoUpdateTime="0" numInputs="2" numOutputs="2" isShell="0"/>\n')
+entry.write_text('<PLUGIN name="DJFX Looper Native" descriptiveName="DJFX Looper Native" format="VST" category="Fx" manufacturer="Rare Data" version="1.1.1" file="/sdcard/vst/DJFXLooperNative.so" uid="446a4e73" isInstrument="0" fileTime="0" infoUpdateTime="0" numInputs="2" numOutputs="2" isShell="0"/>\n')
 zig_env=subprocess.check_output(['zig','env'],text=True)
 lib_dir=Path(re.search(r'\.lib_dir\s*=\s*"([^"]+)"',zig_env).group(1))
 zig_exe=Path(re.search(r'\.zig_exe\s*=\s*"([^"]+)"',zig_env).group(1))
@@ -42,13 +42,13 @@ for notice in licenses:
     text=notice.read_text();digest=hashlib.sha256(text.encode()).hexdigest()
     if digest not in seen:parts.append(notice.parent.name+' / '+notice.name+'\n\n'+text);seen.add(digest)
 runtime_notice.write_text('\n\n'.join(parts)+'\n')
-release_command=[sys.executable,tools/'release.py','--so',arm/'ports/mpc/DJFXLooperNative.so','--skin',skin,'--entry',entry,'--version','1.1.0','--id','djfx-looper','--repo','macdigi/djfx-looper','--license','Apache-2.0','--about','Rare Data short-loop effect with three Q-Link knobs and native scopes. See release notes for validated device profiles.','--extra',str(root/'LICENSE')+':LICENSE','--extra',str(root/'NOTICE')+':NOTICE','--extra',str(runtime_notice)+':Compiler-Runtime-Notices.txt','--extra',str(root/'ports/openmpc/assets/OpenMPC-MIT.txt')+':OpenMPC-MIT.txt','-o',out/'dist']
+release_command=[sys.executable,tools/'release.py','--so',arm/'ports/mpc/DJFXLooperNative.so','--skin',skin,'--entry',entry,'--version','1.1.1','--id','djfx-looper','--repo','macdigi/djfx-looper','--license','Apache-2.0','--about','Rare Data short-loop effect with three Q-Link knobs and native scopes. See release notes for validated device profiles.','--extra',str(root/'LICENSE')+':LICENSE','--extra',str(root/'NOTICE')+':NOTICE','--extra',str(runtime_notice)+':Compiler-Runtime-Notices.txt','--extra',str(root/'ports/openmpc/assets/OpenMPC-MIT.txt')+':OpenMPC-MIT.txt','-o',out/'dist']
 if a.bench:
     measured=json.loads(a.bench.read_text());assert measured['moduleSha256']==hashlib.sha256((arm/'ports/mpc/DJFXLooperNative.so').read_bytes()).hexdigest(), 'CPU report is for another binary'
     assert measured['verdict'] in ['PASS','WARN']
     normalized_bench=out/'bench-for-package.json';normalized_bench.write_text(json.dumps(measured)+'\n');release_command+=['--bench',normalized_bench]
 run(release_command)
-packages=list((out/'dist').glob('*-mpc-armv7.zip'));assert len(packages)==1
+packages=[out/'dist/DJFX-Looper-Native-1.1.1-mpc-armv7.zip'];assert packages[0].is_file()
 # The pinned tool's generic INSTALL text describes its earlier Force test.
 # Replace that statement for this untested edition, retaining standard scripts.
 with zipfile.ZipFile(packages[0]) as archive:
@@ -64,6 +64,6 @@ run([sys.executable,tools/'catalog_check.py',packages[0],'--catalog','--expect-i
 with (out/'scope-snapshot.json').open('w') as stream:run([native/'ports/mpc/DJFXNativeScopeSnapshot'],stdout=stream)
 run([sys.executable,root/'ports/openmpc/test_package.py',skin/'Plugin Skins',out/'scope-snapshot.json',packages[0]])
 
-record={'package':packages[0].name,'sha256':hashlib.sha256(packages[0].read_bytes()).hexdigest(),'hardwareTested':False,'published':False,'sourceOnlyDependencies':True,'privateScopeWorker':False,'version':'1.1.0','uid':'446a4e73'}
+record={'package':packages[0].name,'sha256':hashlib.sha256(packages[0].read_bytes()).hexdigest(),'hardwareTested':False,'published':False,'sourceOnlyDependencies':True,'privateScopeWorker':False,'version':'1.1.1','uid':'446a4e73'}
 (out/'verification.json').write_text(json.dumps(record,indent=2)+'\n')
 print('Offline package ready. Hardware/CPU acceptance is still required; nothing was installed or published.')
