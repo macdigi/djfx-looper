@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Rebuild the source edition's original native skin; no private UI or worker."""
 from pathlib import Path
-import argparse, json, math, os, shutil, sys
+import argparse, json, math, os, shutil, sys, xml.etree.ElementTree as ET
 from PIL import Image, ImageDraw
 
 SCOPES=['PEAKS','WAVE','SPECTRUM','VECTOR','DEPTH','TRACE','BARS']
@@ -95,6 +95,7 @@ for page in ['PLAY','SETUP']:
         lines+=['knob cx=230 cy=580 r=54 key=scope label="SCOPE"','knob cx=640 cy=580 r=54 key=palette label="BAR/WAVE INK"','knob cx=1050 cy=580 r=54 key=scope_on label="SCOPE ON"','qlinks "DISPLAY" = scope,palette,scope_on,enabled,length,speed,loop']
 layout=work/'layout.conf';layout.write_text('\n'.join(lines)+'\n')
 folder=Path(shadow_skin.write_skin(str(args.output.resolve()),'Rare Data','DJFX Looper Native',str(layout.resolve()),params,str(here/'html_art_native.py')))
+version=folder/'version.xml';version_tree=ET.parse(version);version_tree.find('version').text='1.1.0.0';version_tree.write(version,encoding='utf-8',xml_declaration=True)
 skin=folder/'Plugin Skins';file=skin/'TUI.json';doc=json.loads(file.read_text());page=doc['pageData']
 definitions={d['key']:d['value'] for d in page['componentDefinitions']['localComponentDefinitions']}
 replaced=set()

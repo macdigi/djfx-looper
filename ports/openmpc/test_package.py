@@ -12,6 +12,7 @@ def check(value,message):
     if not value:raise AssertionError(message)
 data=json.loads((a.skin/'TUI.json').read_text())['pageData'];defs={x['key']:x['value'] for x in data['componentDefinitions']['localComponentDefinitions']}
 snapshot=json.loads(a.snapshot.read_text());check(snapshot['syntheticAudio'],'Require actual synthetic analysis, not drawn example traces')
+check(ET.parse(a.skin.parent/'version.xml').findtext('version')=='1.1.0.0','Native content version must be valid XML and match the package')
 textures={}
 for definition in defs.values():
     for child in definition.get('componentsData',[]):

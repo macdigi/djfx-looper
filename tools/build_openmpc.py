@@ -3,7 +3,7 @@
 from pathlib import Path
 import argparse,hashlib,json,os,shutil,subprocess,sys,tarfile,zipfile,re
 
-p=argparse.ArgumentParser();p.add_argument('--output',type=Path,default=Path('build/release'));p.add_argument('--tools',type=Path);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--output',type=Path,default=Path('build/release'));p.add_argument('--tools',type=Path);p.add_argument('--bench',type=Path);a=p.parse_args()
 root=Path(__file__).resolve().parents[1];out=a.output.resolve();out.mkdir(parents=True,exist_ok=True)
 lock=json.loads((root/'DEPENDENCIES.json').read_text())
 def run(command,**kwargs):subprocess.run([str(x) for x in command],check=True,**kwargs)
@@ -42,14 +42,19 @@ for notice in licenses:
     text=notice.read_text();digest=hashlib.sha256(text.encode()).hexdigest()
     if digest not in seen:parts.append(notice.parent.name+' / '+notice.name+'\n\n'+text);seen.add(digest)
 runtime_notice.write_text('\n\n'.join(parts)+'\n')
-run([sys.executable,tools/'release.py','--so',arm/'ports/mpc/DJFXLooperNative.so','--skin',skin,'--entry',entry,'--version','1.1.0','--id','djfx-looper','--repo','macdigi/djfx-looper','--license','Apache-2.0','--about','Rare Data short-loop effect with three Q-Link knobs and native scopes. Hardware acceptance pending.','--extra',str(root/'LICENSE')+':LICENSE','--extra',str(root/'NOTICE')+':NOTICE','--extra',str(runtime_notice)+':Compiler-Runtime-Notices.txt','--extra',str(root/'ports/openmpc/assets/OpenMPC-MIT.txt')+':OpenMPC-MIT.txt','-o',out/'dist'])
+release_command=[sys.executable,tools/'release.py','--so',arm/'ports/mpc/DJFXLooperNative.so','--skin',skin,'--entry',entry,'--version','1.1.0','--id','djfx-looper','--repo','macdigi/djfx-looper','--license','Apache-2.0','--about','Rare Data short-loop effect with three Q-Link knobs and native scopes. See release notes for validated device profiles.','--extra',str(root/'LICENSE')+':LICENSE','--extra',str(root/'NOTICE')+':NOTICE','--extra',str(runtime_notice)+':Compiler-Runtime-Notices.txt','--extra',str(root/'ports/openmpc/assets/OpenMPC-MIT.txt')+':OpenMPC-MIT.txt','-o',out/'dist']
+if a.bench:
+    measured=json.loads(a.bench.read_text());assert measured['moduleSha256']==hashlib.sha256((arm/'ports/mpc/DJFXLooperNative.so').read_bytes()).hexdigest(), 'CPU report is for another binary'
+    assert measured['verdict'] in ['PASS','WARN']
+    normalized_bench=out/'bench-for-package.json';normalized_bench.write_text(json.dumps(measured)+'\n');release_command+=['--bench',normalized_bench]
+run(release_command)
 packages=list((out/'dist').glob('*-mpc-armv7.zip'));assert len(packages)==1
 # The pinned tool's generic INSTALL text describes its earlier Force test.
 # Replace that statement for this untested edition, retaining standard scripts.
 with zipfile.ZipFile(packages[0]) as archive:
     infos=archive.infolist();files={i.filename:archive.read(i) for i in infos}
 install=next(n for n in files if n.endswith('/INSTALL.md'))
-text=files[install].decode().replace('- Tested on MPC OS with a Force. Installing plugins this way is unofficial: back up first, use at your own risk.', '- This native-scope edition still needs a Force hardware/CPU test. Installing plugins this way is unofficial: preserve your saved projects and use at your own risk.')
+text=files[install].decode().replace('- Tested on MPC OS with a Force. Installing plugins this way is unofficial: back up first, use at your own risk.', '- See the source repository tested.json and release notes for specific device/firmware results. Installing plugins this way is unofficial: preserve your saved projects and use at your own risk.')
 files[install]=text.encode()
 top=install.rsplit('/',1)[0];sums=top+'/SHA256SUMS'
 files[sums]=('\n'.join(hashlib.sha256(data).hexdigest()+'  '+name[len(top)+1:] for name,data in sorted(files.items()) if name!=sums)+'\n').encode()

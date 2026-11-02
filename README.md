@@ -5,8 +5,10 @@ also powers DJFX Looper and QuotaFX. This source edition adds an original native
 MPC skin and self-contained display analysis. It does not include the shared
 proprietary QuotaFX/DJFX desktop or iOS interface or QuotaScope library.
 
-**Development status:** offline core, native display and package checks pass. A new Force hardware
-test and CPU measurement are required before a downloadable catalog release.
+**Development status:** offline core, native display and package checks pass. The
+Force 3.10.0.49 headless CPU test passed (3.3% p99, 4.1% worst block). The native
+display, listening and project-recall acceptance check is still pending before
+a downloadable catalog release.
 There is no current OpenMPC catalog listing or hardware-verified binary release
 from this repository. Do not confuse host tests with an MPC listening test.
 
@@ -90,3 +92,16 @@ product and neither company endorses it.
 
 Finished desktop and iPhone/iPad apps: https://getquota.app/djfx-looper
 The full 64-effect collection: https://getquota.app/fx
+
+## Reproduce the CPU check
+
+`ports/openmpc/native_bench.c` extends the pinned OpenMPC MIT benchmark with
+seven fixed-scope stages. It lowers only its own priority and uses a 40-second
+process alarm. It does not open an audio device or control the instrument.
+Build it with Zig for ARMv7, then run on a compatible device against the exact
+module you intend to release. The report measures audio/analysis, not UI cost.
+
+The [recorded Force result](benchmarks/force-3.10.0.49.json) identifies its module
+hash. `tools/build_openmpc.py --bench your-result.json` includes a matching
+PASS/WARN report in the local package and rejects a report for another binary.
+The recorded CPU result does not establish graphical or audible acceptance.

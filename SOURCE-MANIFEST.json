@@ -1,5 +1,5 @@
 {
-  "sourceCommit": "d094bee89e7020e13db71e018e79a58d5031a2df",
+  "sourceCommit": "bd29e6eb0bba05f332a02efe6fedede5f068081e",
   "workingTreeDirty": false,
   "files": [
     {
@@ -28,7 +28,11 @@
     },
     {
       "path": "README.md",
-      "sha256": "7cf491b3938b21d1e135ba9f5ca24cbb49c6a598fb3be803e52ba5ac45d7a452"
+      "sha256": "768623e5e7ea7270a852bf0120a7f8491711ee3f4176ab22e1eb57feae50af20"
+    },
+    {
+      "path": "benchmarks/force-3.10.0.49.json",
+      "sha256": "cd1c8648a0654ac110ea3beb4bf2eaf7bd7be93cde2e44208fd67e8d0bc9dcb5"
     },
     {
       "path": "catalog/djfx-looper.json",
@@ -124,11 +128,15 @@
     },
     {
       "path": "ports/openmpc/build_skin.py",
-      "sha256": "73b007ef6ea1fd876c979f367990cb9fe456271e3d786b0da846ff8d2d25b9b4"
+      "sha256": "0916cad3e4b5b85d113823161d1ac19f2edd0b5a70d2d9930a8c136f37882629"
     },
     {
       "path": "ports/openmpc/html_art_native.py",
       "sha256": "01c76652ec5d07a6fed30873a1689bd3a428b58959f0e040baf8883d3360d7a0"
+    },
+    {
+      "path": "ports/openmpc/native_bench.c",
+      "sha256": "4b888824e44819b944f1c435770fbd521ca94a411904a4f5ff2e28790db10410"
     },
     {
       "path": "ports/openmpc/review_skin.py",
@@ -136,7 +144,7 @@
     },
     {
       "path": "ports/openmpc/test_package.py",
-      "sha256": "e35d05bb46e6c83c22c0215d0309d4847c541cea480da5e754a6a57370f1e0c1"
+      "sha256": "5dfebe99c29c4533e2add705d4141762e85dd892cc7aada5e7a938c20827a752"
     },
     {
       "path": "tested.json",
@@ -148,12 +156,12 @@
     },
     {
       "path": "tools/build_openmpc.py",
-      "sha256": "90f6779f8463e35d3e478c62e6b552e7611db6ebcb9e94c046767875489d4263"
+      "sha256": "75ca3096a1573be7238d5c11d8d2c01c3bfd717abd0e12e35366c2d602d66a32"
     }
   ],
   "nativeEdition": true,
   "license": "Apache-2.0",
   "privateScopesIncluded": false,
   "nativeScopeIncluded": true,
-  "distributionStatus": "Source edition; hardware acceptance pending"
+  "distributionStatus": "CPU passed on Force 3.10.0.49; display/audio/recall acceptance pending"
 }

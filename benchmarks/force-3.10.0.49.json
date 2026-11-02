@@ -1,0 +1,15 @@
+{
+  "plugin": "DJFXLooperNative.so",
+  "instrument": 0,
+  "open_ms": 1.4,
+  "p99_pct": 3.3,
+  "max_pct": 4.1,
+  "threads_pct": 0.0,
+  "verdict": "PASS",
+  "moduleSha256": "301edeb7b5276a7c16a3999dcabf8a5f294f7252ac06851b10a4d9e205024e3d",
+  "device": "Akai Professional Force",
+  "firmware": "3.10.0.49",
+  "sampleRate": 44100,
+  "blockFrames": 128,
+  "fixedScopeModes": 7
+}
