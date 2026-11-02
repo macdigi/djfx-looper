@@ -38,7 +38,7 @@ a->dispatcher(a,1,0,0,nullptr,0);b->dispatcher(b,1,0,0,nullptr,0);
 // Physical-Q-Link contract: a continuous Loop knob, with capture strictly
 // above its midpoint. The independent core receives that decision on the very
 // next audio block; there is no worker queue or UI-timer dependency.
-auto* q=factory(nullptr);check(q->uniqueID==(DJFX_NATIVE_SCOPE?0x446a4e73:0x446a4c31)&&q->numParams==(DJFX_NATIVE_SCOPE?142:14)&&q->version==(DJFX_NATIVE_SCOPE?111:101));
+auto* q=factory(nullptr);check(q->uniqueID==(DJFX_NATIVE_SCOPE?0x446a4e73:0x446a4c31)&&q->numParams==(DJFX_NATIVE_SCOPE?142:14)&&q->version==(DJFX_NATIVE_SCOPE?112:101));
 VstParameterProperties props{};check(q->dispatcher(q,56,2,0,&props,0)==1&&props.flags==4);
 #if DJFX_NATIVE_SCOPE
 for(int i=14;i<142;++i){float before=q->getParameter(q,i);q->setParameter(q,i,1);check(q->getParameter(q,i)==before&&q->dispatcher(q,26,i,0,nullptr,0)==0);}

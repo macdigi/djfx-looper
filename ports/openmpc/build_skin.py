@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Build native Q-Link controls and a marked panel for the public live renderer."""
 from pathlib import Path
-import argparse,base64,json,os,shutil,sys,hashlib,xml.etree.ElementTree as ET
+import argparse,base64,json,os,shutil,sys,hashlib,shlex,xml.etree.ElementTree as ET
 from PIL import Image,ImageDraw
-SCOPES=['PEAKS','WAVE','SPECTRUM','VECTOR','DEPTH','TRACE','BARS']
+LEGACY_SCOPES=['PEAKS','WAVE','SPECTRUM','VECTOR','DEPTH','TRACE','BARS']
+SCOPES=['WAVE']
 p=argparse.ArgumentParser();p.add_argument('output',type=Path);p.add_argument('--tools',type=Path,required=True);p.add_argument('--unbranded',action='store_true');a=p.parse_args()
 here=Path(__file__).resolve().parent;sys.path.insert(0,str(a.tools.resolve()));os.environ['MPC_VST_TOOLS']=str(a.tools.resolve());import shadow_skin
 work=a.output/'skin-source';assets=work/'assets';assets.mkdir(parents=True,exist_ok=True)
@@ -14,7 +15,7 @@ def param(key,name,default=0,options=None):
  if options:value.update(max=len(options)-1,options=options)
  params.append(value)
 param('length','Length');param('speed','Speed',1);param('loop','Loop');param('enabled','FX ON',1)
-param('scope','Scope',0,SCOPES);param('scope_on','Scope ON',1,['OFF','ON']);param('expand','Legacy Expand');param('identity','Display',64,[str(i) for i in range(65)]);param('palette','Ink',0,['MINT','VIOLET','CREAM'])
+param('scope','Legacy Scope',0,LEGACY_SCOPES);param('scope_on','Scope ON',1,['OFF','ON']);param('expand','Legacy Expand');param('identity','Display',64,[str(i) for i in range(65)]);param('palette','Ink',0,['MINT','VIOLET','CREAM'])
 for key in ['surface','sliders','loopview','momentary','hold']:param(key,'Legacy '+key)
 for i in range(64):param('plot%d'%i,'Legacy Display %02d'%(i+1))
 for i in range(64):param('bank%d'%i,'Legacy Selector %02d'%(i+1))
@@ -35,17 +36,35 @@ if not a.unbranded:
  logo='<defs><clipPath id="rd"><rect x="1034" y="92" width="80" height="80" rx="12"/></clipPath></defs><image x="1034" y="92" width="80" height="80" clip-path="url(#rd)" href="data:image/png;base64,'+data+'"/>'
 background='''<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800"><defs><linearGradient id="steel" x2="0" y2="1"><stop stop-color="#333e43"/><stop offset=".5" stop-color="#222b30"/><stop offset="1" stop-color="#121b20"/></linearGradient></defs><rect width="1280" height="800" fill="url(#steel)"/>'''+''.join('<path d="M0 %dH1280" stroke="#9eb1b8" stroke-opacity=".025"/>'%y for y in range(0,800,3))+'''<rect x="24" y="82" width="1232" height="106" rx="16" fill="#152027" stroke="#879899" stroke-opacity=".4"/><rect x="28" y="212" width="1224" height="266" rx="12" fill="#091316" stroke="#76cebc" stroke-opacity=".38"/><rect x="28" y="498" width="1224" height="224" rx="16" fill="#1d292f" stroke="#869396" stroke-opacity=".35"/><path d="M54 188H570" stroke="#b06cf5" stroke-width="3"/>'''+logo+'</svg>'
 (assets/'face.svg').write_text(background)
+(assets/'help-face.svg').write_text(background.replace('<rect x="28" y="212" width="1224" height="266"', '<rect x="28" y="212" width="1224" height="510"').replace('<rect x="28" y="498" width="1224" height="224" rx="16" fill="#1d292f" stroke="#869396" stroke-opacity=".35"/>',''))
 (work/'public.css').write_text(':root{--font:"Archivo Black",sans-serif;--label-size:14px;--radius:10px;--sheen:.02}.knob-track,.knob-arc{stroke-width:6px}.knob-pointer{stroke-width:4px}')
 lines=['art_css=public.css','theme_bg=222b30','theme_panel=1d292f','theme_line=657b80','theme_ink=e8f8f2','theme_ink_dim=9fbdb8','theme_accent=b06cf5','theme_accent_hi=d3a2ff','theme_knob_face=152027','theme_knob_ring=435459','theme_knob_dot=cf9aff','theme_box=1d292f','theme_btn_bg=273a40']
-for page in ['PLAY','SETUP']:
- lines+=['[tab '+page+']','art file=assets/face.svg x=0 y=0 w=1280 h=800','text cx=52 cy=128 label="DJFX LOOPER" size=3.1 align=left fontfile=assets/ArchivoBlack.ttf','text cx=52 cy=174 label="NATIVE SCOPE EDITION" size=1.05 align=left color=9fbdb8 fontfile=assets/ArchivoBlack.ttf','knob cx=1180 cy=128 r=26 key=enabled label="FX ON"']
+for page in ['PLAY','DISPLAY','HELP']:
+ lines+=['[tab '+page+']','art file=assets/'+('help-face.svg' if page=='HELP' else 'face.svg')+' x=0 y=0 w=1280 h=800','text cx=52 cy=128 label="DJFX LOOPER" size=3.1 align=left fontfile=assets/ArchivoBlack.ttf','text cx=52 cy=174 label="NATIVE EDITION" size=1.05 align=left color=9fbdb8 fontfile=assets/ArchivoBlack.ttf','knob cx=1180 cy=128 r=26 key=enabled label="FX ON"']
+ if page=='HELP':
+  help_lines=[
+   (70,238,2.1,'QUICK GUIDE','e8f8f2'),
+   (70,282,1.8,'LENGTH','cf9aff'),(70,314,1.7,'230 to 12 ms. Shorter lengths make tighter repeats.','c6dad6'),
+   (70,352,1.8,'SPEED','cf9aff'),(70,384,1.7,'-100 reverses. 0 stops the read head. +100 plays forward.','c6dad6'),
+   (70,422,1.8,'LOOP + BYPASS','cf9aff'),(70,454,1.7,'Turn LOOP past halfway to catch a loop; turn back to release.','c6dad6'),
+   (70,484,1.7,'Length still shapes the sound with LOOP off.','c6dad6'),
+   (70,516,1.7,'FX ON: OFF is dry; ON applies the effect.','c6dad6'),
+   (70,558,2.0,'MORE FROM RARE DATA','e8f8f2'),
+   (70,586,1.7,'Get DJFX Looper with enhanced scopes through Rare Data HQ.','c6dad6'),
+   (70,618,1.7,'Also: QuotaFX / 64 effects, Quota Stems / separation, RD303 / bass.','c6dad6'),
+   (70,666,1.9,'raredata.net  /  getquota.app/djfx-looper','cf9aff'),
+  ]
+  for x,y,size,label,color in help_lines:lines.append('text cx=%d cy=%d label="%s" size=%s align=left color=%s fontfile=assets/ArchivoBlack.ttf'%(x,y,label,size,color))
+  lines.append('qlinks "HELP" = length,speed,loop,enabled')
+  continue
  lines.append('picture x=40 y=224 w=16 h=4 key=identity files="'+','.join('assets/instance-%d.png'%i for i in range(65))+'"')
  for corner,x,y in [(1,1216,224),(2,40,464),(3,1216,464)]:lines.append('art file=assets/corner-%d.png x=%d y=%d w=16 h=4'%(corner,x,y))
- if page=='PLAY':lines+=['knob cx=230 cy=580 r=58 key=length label="LENGTH"','knob cx=640 cy=580 r=58 key=speed label="SPEED"','knob cx=1050 cy=580 r=58 key=loop label="LOOP"','qlinks "DJFX LOOPER" = length,speed,loop,enabled,scope,palette,scope_on']
- else:lines+=['knob cx=230 cy=580 r=54 key=scope label="SCOPE"','knob cx=640 cy=580 r=54 key=palette label="INK"','knob cx=1050 cy=580 r=54 key=scope_on label="SCOPE ON"','qlinks "DISPLAY" = scope,palette,scope_on,enabled,length,speed,loop']
+ if page=='PLAY':lines+=['knob cx=230 cy=580 r=58 key=length label="LENGTH"','knob cx=640 cy=580 r=58 key=speed label="SPEED"','knob cx=1050 cy=580 r=58 key=loop label="LOOP"','qlinks "DJFX LOOPER" = length,speed,loop,enabled,palette,scope_on']
+ else:lines+=['knob cx=430 cy=580 r=54 key=palette label="INK"','knob cx=850 cy=580 r=54 key=scope_on label="SCOPE ON"','qlinks "DISPLAY" = palette,scope_on,enabled,length,speed,loop']
 layout=work/'layout.conf';layout.write_text('\n'.join(lines)+'\n')
-folder=Path(shadow_skin.write_skin(str(a.output.resolve()),'Rare Data','DJFX Looper Native',str(layout.resolve()),params,str(here/'html_art_native.py')))
-version=folder/'version.xml';tree=ET.parse(version);tree.find('version').text='1.1.1.0';tree.write(version,encoding='utf-8',xml_declaration=True)
+renderer=work/'html_art_native_exec';renderer.write_text('#!/bin/sh\nexec '+shlex.quote(sys.executable)+' '+shlex.quote(str(here/'html_art_native.py'))+' \"$@\"\n');renderer.chmod(0o755)
+folder=Path(shadow_skin.write_skin(str(a.output.resolve()),'Rare Data','DJFX Looper Native',str(layout.resolve()),params,str(renderer.resolve())))
+version=folder/'version.xml';tree=ET.parse(version);tree.find('version').text='1.1.2.0';tree.write(version,encoding='utf-8',xml_declaration=True)
 skin=folder/'Plugin Skins';file=skin/'TUI.json';doc=json.loads(file.read_text());definitions={v['key']:v['value'] for v in doc['pageData']['componentDefinitions']['localComponentDefinitions']}
 for definition in definitions.values():
  for child in definition.get('componentsData',[]):
@@ -71,5 +90,5 @@ assert decoded<32*1024**2,decoded
 for tab in doc['pageData']['tabs']:
  for c in definitions[tab['componentName']]['componentsData']:
   x,y,w,h=map(int,c['bounds']['bounds'].split());assert x>=0 and y>=0 and x+w<=1280 and y+h<=628
-report={'nativeScopes':SCOPES,'parameters':142,'savedParameters':14,'decodedImageBytes':decoded,'filmstripScopeWidgets':0,'connectedInProcessRenderer':True,'privateScopeWorker':False,'startupHook':False,'authenticRareDataLogo':not a.unbranded,'hardwareTested':False}
+report={'nativeScopes':SCOPES,'parameters':142,'savedParameters':14,'decodedImageBytes':decoded,'filmstripScopeWidgets':0,'connectedInProcessRenderer':True,'displayBackend':'DRM scanout buffers','helpPage':True,'enhancedEditionURL':'https://getquota.app/djfx-looper','privateScopeWorker':False,'startupHook':False,'authenticRareDataLogo':not a.unbranded,'hardwareTested':False}
 (folder/'skin-verification.json').write_text(json.dumps(report,indent=2)+'\n');print(folder);print(json.dumps(report))

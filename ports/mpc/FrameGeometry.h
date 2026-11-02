@@ -7,7 +7,7 @@ namespace rdscope {
 inline std::array<uint32_t,4> marker(int slot,int corner){return {0x0b1518u,corner?uint32_t(0x101a19+corner):uint32_t(((8+(slot>>3))<<16)|((16+(slot&7))<<8)|22),uint32_t(0x0c171a+corner),0x0a1417u};}
 struct Region{int x=0,y=0,slot=64,page=0,rotation=0;};
 struct Surface {
-    uint32_t* data=nullptr;std::size_t words=0;int physicalWidth=0,physicalHeight=0,stride=0,pages=0;
+    volatile uint32_t* data=nullptr;std::size_t words=0;int physicalWidth=0,physicalHeight=0,stride=0,pages=0;
     int logicalWidth(int rotation)const{return rotation?physicalHeight:physicalWidth;}
     int logicalHeight(int rotation)const{return rotation?physicalWidth:physicalHeight;}
     std::size_t address(int x,int y,int page,int rotation)const{
@@ -33,7 +33,7 @@ struct Surface {
         // Revalidate all four boundaries immediately before writing. Never draw
         // over a different plugin, menu, project or system screen.
         if(!valid(r)||w!=1152||h!=228)return;
-        for(int y=0;y<h;++y)for(int x=0;x<w;++x){auto i=address(r.x+20+x,r.y+8+y,r.page,r.rotation);if(i<words)data[i]=(data[i]&0xff000000)|(pixels[y*w+x]&0xffffff);}
+        for(int y=0;y<h;++y){if(!valid(r))return;for(int x=0;x<w;++x){auto i=address(r.x+20+x,r.y+8+y,r.page,r.rotation);if(i<words)data[i]=(data[i]&0xff000000)|(pixels[y*w+x]&0xffffff);}}
     }
 };
 }

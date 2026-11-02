@@ -5,7 +5,7 @@
   "repo": "macdigi/djfx-looper",
   "kind": "effect",
   "license": "Apache-2.0",
-  "summary": "Three Q-Link knobs for short loops, speed bends and reverse playback, with native scopes.",
+  "summary": "Three Q-Link knobs for short loops, speed bends and reverse playback, with a waveform and quick guide.",
   "style": "glitch",
   "tags": [
     "looper",

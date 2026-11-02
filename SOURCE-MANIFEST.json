@@ -1,5 +1,5 @@
 {
-  "sourceCommit": "ccbe75fcbe8f7332491da9161b8a07b16031a5a0",
+  "sourceCommit": "82acc2c23c8c84a81a9f380e236fd3a99bdbefc6",
   "workingTreeDirty": false,
   "files": [
     {
@@ -12,7 +12,7 @@
     },
     {
       "path": "CMakeLists.txt",
-      "sha256": "11ed7941b3e532989a0d72e9940c82c10bb017b1672dc4fd9788f5a9115a708e"
+      "sha256": "9d3f1f2ee3741ec04f8bd747cba4d13e65f3d202ccfb92b04ffdd414cf987166"
     },
     {
       "path": "DEPENDENCIES.json",
@@ -28,7 +28,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "458c946a2606e145e326d0a5d505594e71e722e4b99446c6ffef3e5ef9a5d05d"
+      "sha256": "4c73cf4398109b9856c9a067875ae8171ba733a2ddb08de4426e54a893e747aa"
     },
     {
       "path": "benchmarks/force-3.10.0.49-1.1.1.json",
@@ -40,7 +40,7 @@
     },
     {
       "path": "catalog/djfx-looper.json",
-      "sha256": "37417061322d9cd6c2f3219517f8bacbd623517bea8869434711aefae0d0dc7a"
+      "sha256": "0bd16826c49f60917a36ec716df713e7d0f63eaa4e185ca7155025a977605941"
     },
     {
       "path": "core/DJFXKernel.h",
@@ -64,19 +64,23 @@
     },
     {
       "path": "docs/native-interface-preview.png",
-      "sha256": "90db822fce2b100599a9c1e83522a765bbf001ae9f733cc0d8b99980dafa170d"
+      "sha256": "be6cc35d05b900402438cd55355d1cec95562f3674d30770e0a0f6ea3e04ce44"
     },
     {
       "path": "ports/mpc/CMakeLists.txt",
-      "sha256": "313b48e051ee16dd7860f821e6ae58a47bf4a9fc6f00aeebd827890beeb8ba39"
+      "sha256": "759f66312e2e535f62d7a26a7595e475ce73334411c5f91dadfdb526b9d156a4"
     },
     {
       "path": "ports/mpc/ContractTests.cpp",
-      "sha256": "433a0e74bb8e8247e8883aef424d9ef2ddfbfd5478d7eed4c2e8107827adc24d"
+      "sha256": "80a39be01c8fc147e288d92c988952045e43eca81725b9004f638db70cb73f52"
+    },
+    {
+      "path": "ports/mpc/DrmTargets.h",
+      "sha256": "9b601704ca7b001813854ec1c7e57a902c5dbc14ca1dc19a3bd82e0b0af72be2"
     },
     {
       "path": "ports/mpc/FrameDisplay.cpp",
-      "sha256": "373bbb9b5c65ab1c0bd6e5e0cf289ba8705e91d0fd5ab8e9013146d4627bcc39"
+      "sha256": "44e5eb74422a4f23ccb0de7ab12d6967e845d214696784c9b4d0b021012685d0"
     },
     {
       "path": "ports/mpc/FrameDisplay.h",
@@ -84,11 +88,11 @@
     },
     {
       "path": "ports/mpc/FrameGeometry.h",
-      "sha256": "0f6eb855a3f3e84002964e7fb921608819a7c75c28d400f135bf68e5b9d53839"
+      "sha256": "e93f4674f20759d0752fc2f14caf19a9a754d91208fa526f1f16eedd0c60d3cb"
     },
     {
       "path": "ports/mpc/NativeScope.h",
-      "sha256": "aa513076756be6547b277dc588431abf0429434950f7e202bd1096e0b41d2eb0"
+      "sha256": "b76b05cd5fe4b5d8e12a3748a70d19f83e739b530d203b25c708f460460d0fa2"
     },
     {
       "path": "ports/mpc/NativeScopeSnapshot.cpp",
@@ -100,7 +104,7 @@
     },
     {
       "path": "ports/mpc/Plugin.cpp",
-      "sha256": "4483cd4d3fb595b6c09dd1db6ebff46967b339e7d7795923e67002a1407a2ee8"
+      "sha256": "b664164925713fbbd0acd2576f840bd968312d674cf7e38165aefac89b7e4a61"
     },
     {
       "path": "ports/mpc/ScopeBridge.h",
@@ -164,7 +168,7 @@
     },
     {
       "path": "ports/openmpc/build_skin.py",
-      "sha256": "1052299d3983de4ca032c2b24aeabcdfdcbeb9faf902e14f6decaa7d21ff97ce"
+      "sha256": "c7f415b4e3baeda79383db999c6e02051f611fa4d515aa784ceb9189cd23ebd0"
     },
     {
       "path": "ports/openmpc/html_art_native.py",
@@ -176,11 +180,11 @@
     },
     {
       "path": "ports/openmpc/review_skin.py",
-      "sha256": "db3e1d084f6505008f06b784d690eb34703c16d8a4e1dbaf3d66cd7274f95205"
+      "sha256": "269131236b35b99b96b07f6922bfcc96dad6a0e0598500b490ba723a1a47beaf"
     },
     {
       "path": "ports/openmpc/test_package.py",
-      "sha256": "1c7374242c89452798fb04967e62ae64bc77b64ad897225438420b120a4e07b3"
+      "sha256": "dab3db021ed28540d8bfc2579b71381fcbc497e1d58a6f8a8b417df562568624"
     },
     {
       "path": "tested.json",
@@ -192,12 +196,12 @@
     },
     {
       "path": "tools/build_openmpc.py",
-      "sha256": "745a15196336a42e10af2053e97e505cdee78ab11500bc20e5b9887ab16b466f"
+      "sha256": "0d8b485a0376b1ef284138dd55ed7ebf53b0bf7430d0640d35dca998a34d585f"
     }
   ],
   "nativeEdition": true,
   "license": "Apache-2.0",
   "privateScopesIncluded": false,
   "nativeScopeIncluded": true,
-  "distributionStatus": "Corrective 1.1.1 CPU passed; live scope/logo hardware acceptance pending"
+  "distributionStatus": "1.1.2 offline candidate; moving waveform hardware acceptance pending; no stable catalog binary"
 }

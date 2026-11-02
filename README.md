@@ -5,24 +5,10 @@ also powers DJFX Looper and QuotaFX. This source edition adds an original native
 MPC skin and self-contained display analysis. It does not include the shared
 proprietary QuotaFX/DJFX desktop or iOS interface or QuotaScope library.
 
-**Development status:** offline core, native display and package checks pass. The
-Force 3.10.0.49 headless CPU test passed (3.3% p99, 4.1% worst block). The native
-display, listening and project-recall acceptance check is still pending before
-a downloadable catalog release.
+**Development status:** offline core, native display and package checks pass. A new Force hardware
+test and CPU measurement are required before a downloadable catalog release.
 There is no current OpenMPC catalog listing or hardware-verified binary release
 from this repository. Do not confuse host tests with an MPC listening test.
-
-![Offline native skin preview, using synthetic audio; not a Force screenshot](docs/native-interface-preview.png)
-
-Offline asset composition only. Live native display responsiveness still needs the Force check.
-
-## Known hardware failure — native display revision in progress
-
-The first native filmstrip scope prototype failed its Force test: the display
-was frozen and visually coarse. Corrective 1.1.1 replaces that path with a
-connected in-process renderer; its live GUI acceptance is still pending. The released branded HQ edition works; use that
-for normal work. No stable binary/catalog release is published here. The code
-and native graphics are being corrected, including the authentic Rare Data logo.
 
 ## Audio and controls
 
@@ -37,16 +23,25 @@ to Rare Data's accepted implementation, not universal bit identity to hardware.
 
 ## The native interface
 
-PLAY retains three matching native Q-Link knobs. DISPLAY chooses seven original
-scope views, ink and Scope ON. Version 1.1.0's experimental filmstrip meters
-failed the hardware refresh check; they are not used by 1.1.1.
+PLAY retains three matching native Q-Link knobs and one connected waveform.
+DISPLAY changes its ink or switches it off. HELP is an on-device quick guide
+with the controls, bypass behavior and the Rare Data HQ / product URLs. It
+points to the enhanced DJFX edition, QuotaFX, Quota Stems and RD303. Website
+addresses are readable on-device; the Force page does not launch a browser.
 
-The 1.1.1 candidate draws connected curves in-process from coherent atomic audio
-snapshots. Its renderer verifies four instance-specific panel boundaries before
-writing any pixels, supports rotated/triple-buffered Force framebuffers and
-never draws without its own markers. It starts only inside the Force MPC
-process. It is not an external daemon and installs no startup hook or private
-QuotaScope helper. The shared desktop/iOS scope implementation stays private.
+**Hardware status:** the owner confirmed the authentic logo in 1.1.1, but its
+scopes remained blank. Read-only diagnostics found that `/dev/fb0` is empty on
+the tested Force; JUCE presents through separate DRM scanout buffers. The 1.1.2
+candidate uses public libdrm queries to locate/map those buffers, then checks
+four instance-specific native panel markers before and during each draw. It
+changes no mode, plane, connector, host hook or startup setting and releases
+only its own buffer handles. Its moving-waveform hardware acceptance is open.
+The earlier 1.1.0 parameter-filmstrip approach also failed hardware refresh.
+
+The renderer starts only inside the actual Force MPC process. It has no helper
+process, daemon, startup hook or private QuotaScope dependency. The shared
+proprietary desktop/iOS scope implementation stays private. The saved legacy
+scope parameter stays reserved; only WAVE is exposed in the current interface.
 
 The real Rare Data logo is included under its separate branding permission;
 Apache-2.0 covers the code, not that logo. Forks can build with an unbranded
@@ -83,7 +78,7 @@ Builds do not connect to or install anything on a device.
 
 The compiler targets ARM32 hard-float with glibc 2.31. That is a build target,
 not a claim of support for every MPC model or firmware. Gen2/AArch64 is not
-included. Native meters and the actual release ZIP must still pass the catalog's
+included. The live waveform and the actual release ZIP must still pass the catalog's
 hardware and CPU workflow before a stable release is published.
 
 ## Licensing and provenance
@@ -103,16 +98,3 @@ product and neither company endorses it.
 
 Finished desktop and iPhone/iPad apps: https://getquota.app/djfx-looper
 The full 64-effect collection: https://getquota.app/fx
-
-## Reproduce the CPU check
-
-`ports/openmpc/native_bench.c` extends the pinned OpenMPC MIT benchmark with
-seven fixed-scope stages. It lowers only its own priority and uses a 40-second
-process alarm. It does not open an audio device or control the instrument.
-Build it with Zig for ARMv7, then run on a compatible device against the exact
-module you intend to release. The report measures audio/analysis, not UI cost.
-
-The [recorded Force result](benchmarks/force-3.10.0.49.json) identifies its module
-hash. `tools/build_openmpc.py --bench your-result.json` includes a matching
-PASS/WARN report in the local package and rejects a report for another binary.
-The recorded CPU result does not establish graphical or audible acceptance.

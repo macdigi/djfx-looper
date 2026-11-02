@@ -12,7 +12,7 @@ def check(value,message):
     if not value:raise AssertionError(message)
 data=json.loads((a.skin/'TUI.json').read_text())['pageData'];defs={x['key']:x['value'] for x in data['componentDefinitions']['localComponentDefinitions']}
 snapshot=json.loads(a.snapshot.read_text());check(snapshot['syntheticAudio'],'Require synthetic analyzer data')
-check(ET.parse(a.skin.parent/'version.xml').findtext('version')=='1.1.1.0','Content version must be valid XML and match the package')
+check(ET.parse(a.skin.parent/'version.xml').findtext('version')=='1.1.2.0','Content version must be valid XML and match the package')
 textures={}
 for definition in defs.values():
     for child in definition.get('componentsData',[]):
@@ -21,12 +21,13 @@ for definition in defs.values():
             with Image.open(a.skin/name) as im:w,h=im.size
             check(h==w*v['numFrames'],'Filmstrip count mismatch');check(h<=16384,'Oversized device texture');textures[name]=w*h*4
 check(sum(textures.values())<32*1024**2,'Too much decoded native artwork')
+check([tab['tabName'] for tab in data['tabs']]==['DJFX LOOPER','DISPLAY','HELP'],'Missing native guide/display navigation')
 for tab in data['tabs']:
     components=defs[tab['componentName']]['componentsData']
     check(not any(c['componentData']['type'].startswith('shMeter_') for c in components),'Live scopes must not depend on non-refreshing native parameter meters')
     for c in components:
         x,y,w,h=map(int,c['bounds']['bounds'].split());check(x>=0 and y>=0 and x+w<=1280 and y+h<=628,'Control outside native screen')
-    for slot in range(65):
+    for slot in range(65) if tab['tabName']!='HELP' else []:
         shown=0
         for c in components:
             conditional=c['bounds'].get('additionalInvalidatingHandles',[])
@@ -34,6 +35,8 @@ for tab in data['tabs']:
                 match=re.fullmatch(r'IndexedEnabling/(\d+)/65/Parameter 7',value)
                 if match and int(match[1])==slot:shown+=1
         check(shown==1,'Each display instance needs one unique native identity marker')
+help_components=defs[next(t['componentName'] for t in data['tabs'] if t['tabName']=='HELP')]['componentsData']
+check(not any(c['bounds'].get('additionalInvalidatingHandles') for c in help_components),'Help must not carry live drawing markers')
 qlinks=json.loads((a.skin/'Q-Links.json').read_text())['Screen Mode Q-Links']['map'][0]['Q-Links']
 check([qlinks['Q-Link '+str(i)] for i in [13,9,5,1]]==[0,1,2,3],'Performance Q-Links changed')
 

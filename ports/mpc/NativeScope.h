@@ -8,8 +8,8 @@
 #include <cstdint>
 
 // Original, self-contained display analysis for the source edition. MPC draws
-// display-only filmstrips from these normalized parameters. No framebuffer,
-// private QuotaScope protocol, helper process, file or audio callback allocation.
+// Legacy display parameters remain reserved. The current native renderer reads
+// coherent frames below; no private QuotaScope protocol or audio allocation.
 class DJFXNativeScope {
 public:
     static constexpr int frameSamples = 2048;

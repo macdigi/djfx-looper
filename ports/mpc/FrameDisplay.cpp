@@ -9,7 +9,7 @@
 #include <cstdio>
 #include <cstring>
 #if defined(__linux__)
-#include <linux/fb.h>
+#include "DrmTargets.h"
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 #include <sys/resource.h>
@@ -41,34 +41,32 @@ private:
         // Linux nice values are per-thread. Do not change the instrument's
         // audio threads, scheduler, network, startup or firmware settings.
         setpriority(PRIO_PROCESS,static_cast<id_t>(syscall(SYS_gettid)),15);
-        int fd=open("/dev/fb0",O_RDWR|O_CLOEXEC);if(fd<0)return;fb_fix_screeninfo fixed{};fb_var_screeninfo variable{};
-        if(ioctl(fd,FBIOGET_FSCREENINFO,&fixed)||ioctl(fd,FBIOGET_VSCREENINFO,&variable)||variable.bits_per_pixel!=32||variable.red.offset!=16||variable.green.offset!=8||variable.blue.offset!=0){close(fd);return;}
-        void* memory=mmap(nullptr,fixed.smem_len,PROT_READ|PROT_WRITE,MAP_SHARED,fd,0);if(memory==MAP_FAILED){close(fd);return;}
-        rdscope::Surface surface{static_cast<uint32_t*>(memory),fixed.smem_len/4,int(variable.xres),int(variable.yres),int(fixed.line_length/4),int(variable.yres_virtual/variable.yres)};
-        surface.pages=std::min(surface.pages,3);std::array<rdscope::Region,9> regions{};std::array<bool,9> cached{};
+        DJFXDrmTargets buffers;
         DJFXNativeScope::Frame frame;DJFXScopeCanvas canvas;unsigned long frames=0;unsigned sequence=0;int visible=64;uint32_t hash=0;
         char path[128];std::snprintf(path,sizeof(path),"/tmp/rd-djfx-native-%ld.metrics",long(getpid()));int stats=open(path,O_WRONLY|O_CREAT|O_EXCL|O_NOFOLLOW|O_CLOEXEC,0600);
-        auto lastStats=std::chrono::steady_clock::now();
+        auto lastStats=std::chrono::steady_clock::now(),lastRefresh=lastStats-std::chrono::seconds(2);
         while(!stop.load()){
+            auto now=std::chrono::steady_clock::now();if(now-lastRefresh>std::chrono::seconds(1)){buffers.refresh();lastRefresh=now;}
             bool found=false;int renderedSlot=64;std::unique_lock<std::mutex> lock(mutex);
             std::array<bool,64> active{};for(int i=0;i<64;++i)active[i]=scopes[i]!=nullptr;
-            for(int page=0;page<surface.pages;++page)for(int rotation:{0,1,3}){
-                int index=page*3+(rotation==0?0:rotation==1?1:2);auto& region=regions[index];
-                if(cached[index]&&(!active[region.slot]||!surface.valid(region)))cached[index]=false;
-                if(!cached[index])cached[index]=surface.locate(page,rotation,active,region);
-                if(!cached[index])continue;auto* scope=scopes[region.slot];if(!scope)continue;found=true;visible=region.slot;
-                if(renderedSlot!=region.slot){scope->readFrame(frame);sequence=frame.sequence;canvas.render(frame,scope->modeValue(),scope->paletteValue(),scope->enabledValue(),1152,228);renderedSlot=region.slot;
+            for(auto& target:buffers.targets)if(target.id)for(int rotation:{0,1,3}){
+                auto& surface=target.surface;int index=rotation==0?0:rotation==1?1:2;auto& region=target.regions[index];
+                if(target.cached[index]&&(!active[region.slot]||!surface.valid(region)))target.cached[index]=false;
+                if(!target.cached[index])target.cached[index]=surface.locate(0,rotation,active,region);
+                if(!target.cached[index])continue;auto* scope=scopes[region.slot];if(!scope)continue;found=true;visible=region.slot;
+                if(renderedSlot!=region.slot){scope->readFrame(frame);sequence=frame.sequence;canvas.render(frame,1,scope->paletteValue(),scope->enabledValue(),1152,228);renderedSlot=region.slot;
                     hash=2166136261u;for(std::size_t p=0;p<canvas.pixels().size();p+=61)hash=(hash^canvas.pixels()[p])*16777619u;}
                 if(!canvas.pixels().empty())surface.blit(region,canvas.pixels().data(),1152,228);
             }
             if(found)++frames;
-            auto now=std::chrono::steady_clock::now();if(stats>=0&&now-lastStats>std::chrono::seconds(1)){
-                char text[256];int n=std::snprintf(text,sizeof(text),"{\"drawnFrames\":%lu,\"audioSequence\":%u,\"visibleSlot\":%d,\"markerVisible\":%s,\"imageHash\":%u,\"externalWorker\":false}\n",frames,sequence,visible,found?"true":"false",hash);lseek(stats,0,SEEK_SET);write(stats,text,n);ftruncate(stats,n);lastStats=now;}
+            now=std::chrono::steady_clock::now();if(stats>=0&&now-lastStats>std::chrono::seconds(1)){
+                int mapped=0;for(auto& target:buffers.targets)mapped+=bool(target.id);
+                char text[320];int n=std::snprintf(text,sizeof(text),"{\"drawnFrames\":%lu,\"audioSequence\":%u,\"visibleSlot\":%d,\"markerVisible\":%s,\"imageHash\":%u,\"drmBuffers\":%d,\"renderer\":\"DRM-wave\",\"externalWorker\":false}\n",frames,sequence,visible,found?"true":"false",hash,mapped);lseek(stats,0,SEEK_SET);write(stats,text,n);ftruncate(stats,n);lastStats=now;}
             // Release the registry before sleeping (scope destruction never
             // waits on this timer, only on an in-progress bounded draw).
             lock.unlock();std::this_thread::sleep_for(found?std::chrono::milliseconds(33):std::chrono::milliseconds(250));
         }
-        if(stats>=0){close(stats);unlink(path);}munmap(memory,fixed.smem_len);close(fd);
+        if(stats>=0){close(stats);unlink(path);}
 #endif
     }
 };
