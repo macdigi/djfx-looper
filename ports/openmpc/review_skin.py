@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline native-asset composites with actual synthetic-audio analysis values.
+"""Offline native-asset layout review; no synthetic scope or hardware claim.
 
 These are layout reviews, not screenshots or evidence of a working MPC display.
 """
@@ -7,8 +7,8 @@ from pathlib import Path
 import argparse,json,re
 from PIL import Image,ImageDraw,ImageFont
 
-p=argparse.ArgumentParser();p.add_argument('skin',type=Path);p.add_argument('snapshot',type=Path);p.add_argument('output',type=Path);p.add_argument('--connected-frames',type=Path);a=p.parse_args()
-doc=json.loads((a.skin/'TUI.json').read_text())['pageData'];snapshot=json.loads(a.snapshot.read_text());assert snapshot['syntheticAudio']
+p=argparse.ArgumentParser();p.add_argument('skin',type=Path);p.add_argument('output',type=Path);a=p.parse_args()
+doc=json.loads((a.skin/'TUI.json').read_text())['pageData']
 defs={v['key']:v['value'] for v in doc['componentDefinitions']['localComponentDefinitions']}
 a.output.mkdir(parents=True,exist_ok=True)
 font=ImageFont.truetype(str(Path(__file__).parent/'assets/ArchivoBlack.ttf'),16)
@@ -21,7 +21,7 @@ def load(name):
 for page,tab in enumerate(doc['tabs']):
     for mode in [1]:
         im=Image.new('RGBA',(1280,628),(10,18,22,255));draw=ImageDraw.Draw(im)
-        values=[.5,.8,1,1,mode/6,1,0,1/64,0,0,0,0,0,0]+snapshot['modes'][mode]
+        values=[.5,.8,1,1,mode/6,1,0,1/64,0,0,0,0,0,0]+[0]*128
         for c in defs[tab['componentName']]['componentsData']:
             conditions=c['bounds'].get('additionalInvalidatingHandles',[])
             if any((m:=re.fullmatch(r'IndexedEnabling/(\d+)/(\d+)/Parameter (\d+)',v)) and round(values[int(m[3])]*(int(m[2])-1))!=int(m[1]) for v in conditions):continue
@@ -39,11 +39,9 @@ for page,tab in enumerate(doc['tabs']):
                     label=cd['name'] if data.get('type')=='Name' else ('0.053 s' if param==0 else '60' if param==1 else 'ON' if param in (2,3,5) else ['PEAKS','WAVE','SPECTRUM','VECTOR','DEPTH','TRACE','BARS'][mode] if param==4 else 'MINT' if param==8 else '')
                     if label:
                         bounds=draw.textbbox((0,0),label,font=font);draw.text((x+sx+(sw-bounds[2])/2,y+sy+3),label,font=font,fill='#d9eee8')
-        if a.connected_frames and tab['tabName']!='HELP':
-            with Image.open(a.connected_frames/('scope-'+str(mode)+'.ppm')) as live:im.paste(live.convert('RGBA'),(60,146))
-        name='help.png' if tab['tabName']=='HELP' else ('play-wave.png' if page==0 else 'display-wave.png');im.convert('RGB').save(a.output/name)
-contact=Image.new('RGB',(1280,628*3),(15,20,24));
-for row,name in enumerate(['play-wave.png','display-wave.png','help.png']):
+        name='help.png' if tab['tabName']=='HELP' else 'play.png';im.convert('RGB').save(a.output/name)
+contact=Image.new('RGB',(1280,628*2),(15,20,24));
+for row,name in enumerate(['play.png','help.png']):
     with Image.open(a.output/name) as im:contact.paste(im,(0,row*628))
 contact.save(a.output/'review.png')
-print('Rendered 3 native-asset layout reviews from synthetic signal analysis; no hardware claim.')
+print('Rendered 2 native-asset layout reviews; no hardware claim.')

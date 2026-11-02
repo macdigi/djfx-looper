@@ -2,11 +2,11 @@
 
 Rare Data's short-loop audio effect: Length, Speed and Loop. The portable engine
 also powers DJFX Looper and QuotaFX. This source edition adds an original native
-MPC skin and self-contained display analysis. It does not include the shared
+MPC skin with three Q-Link knobs and an on-device quick guide. It does not include the shared
 proprietary QuotaFX/DJFX desktop or iOS interface or QuotaScope library.
 
-**Development status:** offline core, native display and package checks pass. A new Force hardware
-test and CPU measurement are required before a downloadable catalog release.
+**Development status:** offline core and package checks pass. Force hardware
+acceptance is still required before a downloadable catalog release.
 There is no current OpenMPC catalog listing or hardware-verified binary release
 from this repository. Do not confuse host tests with an MPC listening test.
 
@@ -23,25 +23,19 @@ to Rare Data's accepted implementation, not universal bit identity to hardware.
 
 ## The native interface
 
-PLAY retains three matching native Q-Link knobs and one connected waveform.
-DISPLAY changes its ink or switches it off. HELP is an on-device quick guide
-with the controls, bypass behavior and the Rare Data HQ / product URLs. It
-points to the enhanced DJFX edition, QuotaFX, Quota Stems and RD303. Website
-addresses are readable on-device; the Force page does not launch a browser.
+PLAY has three matching native Q-Link knobs: Length, Speed and Loop, plus FX ON.
+HELP gives a short on-device guide and the Rare Data HQ / product URLs. It
+points to DJFX Looper with enhanced scopes, QuotaFX, Quota Stems and RD303.
+Website addresses are readable on-device; the Force page does not launch a
+browser. This Native source edition intentionally has no audio scope. The
+finished enhanced-scope edition remains available through Rare Data HQ.
 
-**Hardware status:** the owner confirmed the authentic logo in 1.1.1, but its
-scopes remained blank. Read-only diagnostics found that `/dev/fb0` is empty on
-the tested Force; JUCE presents through separate DRM scanout buffers. The 1.1.2
-candidate uses public libdrm queries to locate/map those buffers, then checks
-four instance-specific native panel markers before and during each draw. It
-changes no mode, plane, connector, host hook or startup setting and releases
-only its own buffer handles. Its moving-waveform hardware acceptance is open.
-The earlier 1.1.0 parameter-filmstrip approach also failed hardware refresh.
-
-The renderer starts only inside the actual Force MPC process. It has no helper
-process, daemon, startup hook or private QuotaScope dependency. The shared
-proprietary desktop/iOS scope implementation stays private. The saved legacy
-scope parameter stays reserved; only WAVE is exposed in the current interface.
+The scope experiments in 1.1.0–1.1.2 did not pass hardware acceptance: parameter
+meters failed to refresh, then direct buffer drawing flashed as the host
+repainted. At the owner's request, 1.1.3 removes the renderer entirely. It
+opens no display device, maps no display buffers and starts no graphics worker
+or timer thread. A binary check guards that boundary. Neither the private
+QuotaScope code nor a replacement display hook is included.
 
 The real Rare Data logo is included under its separate branding permission;
 Apache-2.0 covers the code, not that logo. Forks can build with an unbranded
@@ -50,7 +44,8 @@ skin. Archivo Black retains its SIL OFL terms.
 The native identity stays `446a4e73` / `DJFXLooperNative.so`, separate from the
 working HQ edition. The fourteen saved parameters and v1 state layout remain;
 the 128 legacy display/selector parameters remain reserved for compatibility.
-Audio processing allocates no memory and never waits for the display thread.
+Audio processing allocates no memory. The retired display parameters remain
+reserved for saved-project compatibility and produce no display activity.
 
 ## Build and verify
 
@@ -78,7 +73,7 @@ Builds do not connect to or install anything on a device.
 
 The compiler targets ARM32 hard-float with glibc 2.31. That is a build target,
 not a claim of support for every MPC model or firmware. Gen2/AArch64 is not
-included. The live waveform and the actual release ZIP must still pass the catalog's
+included. The actual release ZIP must still pass the catalog's
 hardware and CPU workflow before a stable release is published.
 
 ## Licensing and provenance

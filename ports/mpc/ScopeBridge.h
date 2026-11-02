@@ -1,10 +1,7 @@
 #pragma once
 
 // The audio adapter also builds without Rare Data's private scope implementation.
-#if DJFX_NATIVE_SCOPE
-#include "NativeScope.h"
-using DJFXScopeBridge = DJFXNativeScope;
-#elif DJFX_PRIVATE_SCOPE
+#if DJFX_PRIVATE_SCOPE && !DJFX_NATIVE_SCOPE
 #include "ScopeTap.h"
 using DJFXScopeBridge = qfxforce::ScopeTap;
 #else

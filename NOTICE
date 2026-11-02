@@ -1,12 +1,11 @@
 Rare Data DJFX Looper portable DSP and native MPC edition
 Copyright 2026 Rare Data LLC / Mac Digi.
 
-The dedicated native scope analyzer and skin are included. The shared private
+The dedicated native three-knob skin and Help page are included. The shared private
 QuotaFX/DJFX app UI, QuotaScope library and other effects are not licensed here.
 Archivo Black is distributed under the included SIL Open Font License.
 MPC build tools and standard installer scripts: sd88me/mpc-vst-plugins.
 Hardware names do not imply affiliation or endorsement.
 
 The original Rare Data logo is excluded from the code license; see
-ports/openmpc/assets/BRANDING-LICENSE.txt. The public in-process connected
-renderer is original code and does not contain the private QuotaScope library.
+ports/openmpc/assets/BRANDING-LICENSE.txt. The Native edition includes no scope renderer or private QuotaScope library.

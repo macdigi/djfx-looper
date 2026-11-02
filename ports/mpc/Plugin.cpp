@@ -3,9 +3,6 @@
 #endif
 #include "Vst2Abi.h"
 #include "ScopeBridge.h"
-#if DJFX_NATIVE_SCOPE
-#include "FrameDisplay.h"
-#endif
 #include "../../core/DJFXLooperCore.h"
 #include <atomic>
 #include <cmath>
@@ -15,7 +12,7 @@
 namespace {
 constexpr int stateCount=14;
 constexpr int count=stateCount+(DJFX_NATIVE_SCOPE?128:0);constexpr int uid=DJFX_NATIVE_SCOPE?0x446a4e73:0x446a4c31;
-constexpr int vendorVersion=DJFX_NATIVE_SCOPE?112:101;
+constexpr int vendorVersion=DJFX_NATIVE_SCOPE?113:101;
 const char* scopeNames[]={"PEAKS","WAVE","SPECTRUM","VECTOR","DEPTH","TRACE","BARS"};
 const char* paletteNames[]={DJFX_NATIVE_SCOPE?"MINT":"GRADIENT",DJFX_NATIVE_SCOPE?"VIOLET":"RAINBOW",DJFX_NATIVE_SCOPE?"CREAM":"FLAT"};
 bool engaged(float value){return value>.5f;}
@@ -24,21 +21,13 @@ struct State{uint32_t magic=0x444a4658,version=1;float values[stateCount]{};};
 float norm(float x){return std::isfinite(x)?std::clamp(x,0.f,1.f):0.f;}
 struct Plugin {
     AEffect fx{};raredata::DJFXLooperCore core;DJFXScopeBridge scope;
-#if DJFX_NATIVE_SCOPE
-    DJFXFrameDisplay display{scope};
-#endif
     std::atomic<float> p[count];State chunk;double rate=44100;float gain=1;bool previousOn=true;
     Plugin(){for(auto& v:p)v.store(0);p[1]=1;p[3]=1;p[5]=1;core.prepare(rate);scope.setRate(rate);}
     void set(int i,float v){if(i<0||i>=stateCount||i==7)return;p[i].store(norm(v));
-#if DJFX_NATIVE_SCOPE
-        if(i==4)scope.setMode(1);if(i==5)scope.setEnabled(norm(v)>=.5f);if(i==8)scope.setPalette(int(std::round(norm(v)*2)));
-#endif
         if(i==12&&v>=.5f)p[2].store(0);}
     float get(int i)const{
 #if DJFX_NATIVE_SCOPE
-        if(i==7)return display.identity()/64.f;
-        if(i>=stateCount&&i<stateCount+64)return scope.column(i-stateCount);
-        if(i>=stateCount+64&&i<count)return scope.bank(i-stateCount-64);
+        if(i>=stateCount)return 0; // Retired display outputs retain their indices.
 #endif
         return i==7?scope.displayIdentity()/64.f:i>=0&&i<count?p[i].load():0;}
     void process(float** in,float** out,int n,bool add){
@@ -52,12 +41,10 @@ struct Plugin {
             float a=l+gain*(wet[0]-l),b=r+gain*(wet[1]-r);if(add){out[0][i]+=a;out[1][i]+=b;}else{out[0][i]=a;out[1][i]=b;}}
         // The skin already draws its own steel colours. Theme zero avoids the
         // shared overlay's extra whole-screen recolouring pass for this instance.
-        #if DJFX_NATIVE_SCOPE
-        scope.setMode(1); // One waveform; parameter 4 stays reserved for saved projects.
-#else
+#if !DJFX_NATIVE_SCOPE
         scope.setMode((int)std::round(p[4].load()*6));
-#endif
         scope.setEnabled(p[5].load()>=.5f);scope.setVisuals(engaged(p[6].load()),0,(int)std::round(p[8].load()*2),6);scope.push(out,n);
+#endif
     }
 };
 Plugin& self(AEffect* e){return *static_cast<Plugin*>(e->object);}
