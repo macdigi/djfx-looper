@@ -64,7 +64,7 @@
     },
     {
       "path": "docs/native-interface-preview.png",
-      "sha256": "83d1a8e2a598b308b41615620ae208d42ee355f330cfd0801934f6482dca22db"
+      "sha256": "90db822fce2b100599a9c1e83522a765bbf001ae9f733cc0d8b99980dafa170d"
     },
     {
       "path": "ports/mpc/CMakeLists.txt",
