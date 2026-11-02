@@ -10,6 +10,10 @@ test and CPU measurement are required before a downloadable catalog release.
 There is no current OpenMPC catalog listing or hardware-verified binary release
 from this repository. Do not confuse host tests with an MPC listening test.
 
+![Offline native skin preview, using synthetic audio; not a Force screenshot](docs/native-interface-preview.png)
+
+Offline asset composition only. Live native display responsiveness still needs the Force check.
+
 ## Audio and controls
 
 - Length: 230–12 ms, with the accepted reversed logarithmic knob mapping.

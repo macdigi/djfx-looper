@@ -1,5 +1,5 @@
 {
-  "sourceCommit": "883d73f2f210ac016bde083f458094b89b09cf9c",
+  "sourceCommit": "d094bee89e7020e13db71e018e79a58d5031a2df",
   "workingTreeDirty": false,
   "files": [
     {
@@ -28,7 +28,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "c83795207678da545ac5312016b60f791b25c94f11d3e83e8634e98c92d67eb2"
+      "sha256": "7cf491b3938b21d1e135ba9f5ca24cbb49c6a598fb3be803e52ba5ac45d7a452"
     },
     {
       "path": "catalog/djfx-looper.json",
@@ -53,6 +53,10 @@
     {
       "path": "core/ORIGIN.sha256",
       "sha256": "4b6e051d3d9216f96a92c031accecd9643c8d4be52361f005ab68aca6890d45c"
+    },
+    {
+      "path": "docs/native-interface-preview.png",
+      "sha256": "83d1a8e2a598b308b41615620ae208d42ee355f330cfd0801934f6482dca22db"
     },
     {
       "path": "ports/mpc/CMakeLists.txt",
@@ -144,7 +148,7 @@
     },
     {
       "path": "tools/build_openmpc.py",
-      "sha256": "07169beb43a63e7a6c91a6e3ef38ab6f6941256fd3e5ad7ff99a352af94a0d36"
+      "sha256": "90f6779f8463e35d3e478c62e6b552e7611db6ebcb9e94c046767875489d4263"
     }
   ],
   "nativeEdition": true,
